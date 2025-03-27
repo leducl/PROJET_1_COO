@@ -9,7 +9,9 @@ public class Main {
 
     private static int index; //index gérant les erreurs de choix d'utilisateur
 
-    public static void main(String[] args) {
+    private static int roundCounter = 0;
+
+    public static void main(String[] args) throws InterruptedException {
         while (true) {
             System.out.println("\nBienvenue dans Canard Fighter Simulator !");
             System.out.println("1. Créer un canard");
@@ -62,16 +64,16 @@ public class Main {
 
         switch (type) {
             case EAU:
-                canard = new CanardEau(nom, 100, 10);
+                canard = new CanardEau(nom, 100, 10, 2);
                 break;
             case FEU:
-                canard = new CanardFeu(nom, 100, 10);
+                canard = new CanardFeu(nom, 100, 10, 2);
                 break;
             case GLACE:
-                canard = new CanardGlace(nom, 100, 10);
+                canard = new CanardGlace(nom, 100, 10, 2);
                 break;
             case VENT:
-                canard = new CanardVent(nom, 100, 10);
+                canard = new CanardVent(nom, 100, 10, 2);
                 break;
         }
 
@@ -81,7 +83,7 @@ public class Main {
         }
     }
 
-    private static void lancerBataille() {
+    private static void lancerBataille() throws InterruptedException {
         if (canards.size() < 2) {
             System.out.println("Il faut au moins 2 canards pour lancer une bataille !");
             return;
@@ -107,29 +109,121 @@ public class Main {
         Canard canard2 = canards.get(index2);
 
         System.out.println("\nDébut du combat entre " + canard1.getNom() + " et " + canard2.getNom() + " !");
-
+        roundCounter = 0;
         //Combat des canards
         while (!canard1.estKO() && !canard2.estKO()) {
+            roundCounter++;
+            System.out.println("\nDébut du " + roundCounter + " rounds !\nRécapitulatif des PV");
+            System.out.println(canard1.getNom() + " (" + canard1.getPointsDeVie() + "PV)");
+            System.out.println(canard2.getNom() + " (" + canard2.getPointsDeVie() + "PV)");
 
-            choixAttaque(canard1);
-            choixAttaque(canard2);
+            //Attente de 2s
+            delay(2000);
+
+            //Choix de l'action à faire pour les canards
+            choixAction(canard1);
+            choixAction(canard2);
+
+            //Attente de 2s
+            delay(2000);
+
+            //Calcul du combats
+            combat(canard1, canard2);
+
+            //Attente de 2s
+            delay(2000);
         }
 
-        System.out.println("Le combat est terminé !");
+        System.out.println("Le combat est terminé ! (" + roundCounter + " rounds)");
         if (canard1.estKO()) {
             System.out.println(canard2.getNom() + " a gagné !");
         } else {
             System.out.println(canard1.getNom() + " a gagné !");
         }
+
+        //Attente de 2s
+        delay(3000);
     }
 
-    private static int choixAttaque(Canard canard) {
+    private static void choixAction(Canard canard) {
         int index = -1;
         while (index != 1 && index != 2) { // Tant que l'entrée n'est pas 1 ou 2 on redemande
-            System.out.println("\n" + canard.getNom() + " choisi ton attaque :\n1. Attaque normale !\n2. Attaque spéciale !");
+            System.out.println("\n" + canard.getNom() + " choisi ton attaque :\n1. Attaque normale !\n2. Capacité spéciale !");
             index = scanner.nextInt();
             if (index != 1 && index != 2) System.out.println("\nErreur ! Seulement le choix 1 et 2 sont possible. Réessayer !");
         }
-        return index;
+        canard.SetAction(index);
+    }
+
+    public static void combat(Canard canard1, Canard canard2) throws InterruptedException {
+        Canard premierAttaquant, secondAttaquant;
+
+        // Déterminer qui attaque en premier
+        if (canard1.getVitesseAttaque() >= canard2.getVitesseAttaque()) {
+            premierAttaquant = canard1;
+            secondAttaquant = canard2;
+        } else {
+            premierAttaquant = canard2;
+            secondAttaquant = canard1;
+        }
+
+        //Vérification des statuts
+        if (verifierStatut(premierAttaquant)) {
+            action(premierAttaquant, secondAttaquant);
+        }
+
+        //Attente de 2s
+        delay(2000);
+
+        // Vérifier si le deuxième canard peut attaquer
+        if (!secondAttaquant.estKO()) {
+            // Le deuxième canard joue
+            //Vérification des statuts
+            if (verifierStatut(secondAttaquant)) {
+                action(secondAttaquant, premierAttaquant);
+            }
+        }
+    }
+
+    private static void action(Canard attaquant, Canard cible) {
+        if (attaquant.getAction() == 1){
+            System.out.println(attaquant.getNom() + " attaque !");
+            attaquant.attaquer(cible);
+            afficherEtat(cible);
+        } else {
+            System.out.println(attaquant.getNom() + " utilise sa capacité spéciale !");
+            attaquant.activerCapaciteSpeciale(cible);
+            afficherEtat(cible);
+        }
+    }
+
+    // Méthode pour afficher l'état des PV du canard
+    private static void afficherEtat(Canard canard) {
+        System.out.println(canard.getNom() + " a " + canard.getPointsDeVie() + " PV.");
+        if (canard.estKO()) {
+            System.out.println(canard.getNom() + " est KO !");
+        }
+        if (canard.getStatut() != StatutCanard.HEUREUX) {
+            System.out.println(canard.getNom() + " est maintenant " + canard.getStatut());
+        }
+        System.out.println(); // Ajoute une ligne vide pour la lisibilité
+    }
+
+    private static boolean verifierStatut(Canard canard) {
+        if (canard.getStatut() == StatutCanard.GELER) {
+            System.out.println(canard.getNom() + " est geler, il à pas pu agir..");
+            canard.SetStatut(StatutCanard.HEUREUX);
+            return false;
+        }
+        return true;
+    }
+
+
+    private static void delay(int millis){
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

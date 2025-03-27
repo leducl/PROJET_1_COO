@@ -2,12 +2,12 @@ package canards;
 
 public class CanardFeu extends Canard{
 
-    public CanardFeu(String nom, double PV, double PA) {
-        super(nom, TypeCanard.FEU, PV, PA);
+    public CanardFeu(String nom, double PV, double PA, double VA) {
+        super(nom, TypeCanard.FEU, PV, PA, VA);
     }
 
     @Override
-    public void activerCapaciteSpeciale() {
+    public void activerCapaciteSpeciale(Canard autreCanard) {
         this.PA *= 2;
     }
 }
