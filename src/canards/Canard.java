@@ -3,31 +3,37 @@ package canards;
 public abstract class Canard {
     private String nom;
     private TypeCanard typeCanard;
-    private int PV;
-    private int PA;
+    protected double PV;
+    protected double PA;
+
+    public Canard(String nom, TypeCanard typeCanard, double PV, double PA) {
+        this.nom = nom;
+        this.typeCanard = typeCanard;
+        this.PV = PV;
+        this.PA = PA;
+    }
 
     public TypeCanard getType() {
         return typeCanard;
     }
 
-    public int getPointsDeVie() {
+    public double getPointsDeVie() {
         return PV;
     }
 
-    public int getPointsAttaque() {
+    public double getPointsAttaque() {
         return PA;
     }
 
-    public String getNom(){
+    public String getNom() {
         return nom;
     }
 
-
-
     public void attaquer(Canard autreCanard){
-
+        autreCanard.subirDegats(PA * TypeCanard.getMultiplicateur(this.typeCanard, autreCanard.getType()));
     }
-    public void subirDegats(int degats){
+
+    public void subirDegats(double degats){
         PV -= degats;
     }
 
