@@ -1,5 +1,5 @@
 package canards;
 
 public enum StatutCanard {
-    HEUREUX, ENDORMI, GELER, BRULER;
+    HEUREUX, ENDORMI, GELER, BRULER
 }

@@ -4,14 +4,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
-    private static ArrayList<Canard> canards = new ArrayList<>();
-    private static Scanner scanner = new Scanner(System.in);
+    private static final ArrayList<Canard> canards = new ArrayList<>();
+    private static final Scanner scanner = new Scanner(System.in);
 
-    private static int index; //index gérant les erreurs de choix d'utilisateur
-
-    private static int roundCounter = 0;
-
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         while (true) {
             System.out.println("\nBienvenue dans Canard Fighter Simulator !");
             System.out.println("1. Créer un canard");
@@ -43,7 +39,8 @@ public class Main {
         System.out.print("Entrez le nom du canard : ");
         String nom = scanner.nextLine();
 
-        index = -1;
+        //index gérant les erreurs de choix d'utilisateur
+        int index = -1;
         while (index < 1 || index > TypeCanard.COUNT.ordinal()) {
 
             System.out.println("Choisissez un type de canard :");
@@ -60,22 +57,13 @@ public class Main {
             }
         }
         TypeCanard type = TypeCanard.values()[index - 1];
-        Canard canard = null;
-
-        switch (type) {
-            case EAU:
-                canard = new CanardEau(nom, 100, 10, 2);
-                break;
-            case FEU:
-                canard = new CanardFeu(nom, 100, 10, 2);
-                break;
-            case GLACE:
-                canard = new CanardGlace(nom, 100, 10, 2);
-                break;
-            case VENT:
-                canard = new CanardVent(nom, 100, 10, 2);
-                break;
-        }
+        Canard canard = switch (type) {
+            case EAU -> new CanardEau(nom, 100, 10, 2);
+            case FEU -> new CanardFeu(nom, 100, 10, 2);
+            case GLACE -> new CanardGlace(nom, 100, 10, 2);
+            case VENT -> new CanardVent(nom, 100, 10, 2);
+            default -> null;
+        };
 
         if (canard != null) {
             canards.add(canard);
@@ -83,7 +71,7 @@ public class Main {
         }
     }
 
-    private static void lancerBataille() throws InterruptedException {
+    private static void lancerBataille() {
         if (canards.size() < 2) {
             System.out.println("Il faut au moins 2 canards pour lancer une bataille !");
             return;
@@ -109,7 +97,7 @@ public class Main {
         Canard canard2 = canards.get(index2);
 
         System.out.println("\nDébut du combat entre " + canard1.getNom() + " et " + canard2.getNom() + " !");
-        roundCounter = 0;
+        int roundCounter = 0;
         //Combat des canards
         while (!canard1.estKO() && !canard2.estKO()) {
             roundCounter++;
@@ -155,7 +143,7 @@ public class Main {
         canard.SetAction(index);
     }
 
-    public static void combat(Canard canard1, Canard canard2) throws InterruptedException {
+    public static void combat(Canard canard1, Canard canard2) {
         Canard premierAttaquant, secondAttaquant;
 
         // Déterminer qui attaque en premier

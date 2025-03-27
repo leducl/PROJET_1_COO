@@ -1,8 +1,8 @@
 package canards;
 
 public abstract class Canard {
-    private String nom;
-    private TypeCanard typeCanard;
+    private final String nom;
+    private final TypeCanard typeCanard;
     protected double PV; // Point de vie
     protected double PA; // Dégâts
     protected double VA; //Vitesse d'attaque
