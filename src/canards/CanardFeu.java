@@ -10,4 +10,9 @@ public class CanardFeu extends Canard{
     public void activerCapaciteSpeciale(Canard autreCanard) {
         this.PA *= 2;
     }
+
+    @Override
+    public void appliquerEffect(Canard autreCanard) {
+        autreCanard.SetStatut(StatutCanard.BRULE);
+    }
 }

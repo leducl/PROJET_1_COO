@@ -11,4 +11,9 @@ public class CanardEau extends Canard{
     public void activerCapaciteSpeciale(Canard autreCanard) {
         this.PV += 20;
     }
+
+    @Override
+    public void appliquerEffect(Canard autreCanard) {
+        autreCanard.SetStatut(StatutCanard.MOUILLE);
+    }
 }

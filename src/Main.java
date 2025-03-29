@@ -1,13 +1,23 @@
 import canards.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    private static final ArrayList<Canard> canards = new ArrayList<>();
+    private static ArrayList<Canard> canards = new ArrayList<>();
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+
+        //Creation de 4 canards par défaut
+        canards = new ArrayList<>(List.of(
+                new CanardGlace("Glaçon", 95, 12, 1),
+                new CanardFeu("Chaudière", 120, 15, 0.5),
+                new CanardVent("Ventilo", 80, 10, 1.5),
+                new CanardEau("Mouillé", 110, 12, 1)
+        ));
+
         while (true) {
             System.out.println("\nBienvenue dans Canard Fighter Simulator !");
             System.out.println("1. Créer un canard");
@@ -109,8 +119,9 @@ public class Main {
             delay(2000);
 
             //Choix de l'action à faire pour les canards
-            choixAction(canard1);
-            choixAction(canard2);
+            gererActionCanard(canard1);
+            delay(1000);
+            gererActionCanard(canard2);
 
             //Attente de 2s
             delay(2000);
@@ -128,9 +139,20 @@ public class Main {
         } else {
             System.out.println(canard1.getNom() + " a gagné !");
         }
+        //Reset des PV, Statut et Actions des canards
+        canard1.resetValues();
+        canard2.resetValues();
 
         //Attente de 2s
         delay(3000);
+    }
+
+    private static void gererActionCanard(Canard canard) {
+        if (canard.getAction() == 0) {
+            choixAction(canard);
+        } else {
+            System.out.println("\n" + canard.getNom() + " : capacité spéciale déjà activée dans le combat.\nAttaque normale sélectionnée !\n");
+        }
     }
 
     private static void choixAction(Canard canard) {
@@ -140,7 +162,7 @@ public class Main {
             index = scanner.nextInt();
             if (index != 1 && index != 2) System.out.println("\nErreur ! Seulement le choix 1 et 2 sont possible. Réessayer !");
         }
-        canard.SetAction(index);
+        canard.SetAction(index - 1);
     }
 
     public static void combat(Canard canard1, Canard canard2) {
@@ -175,12 +197,13 @@ public class Main {
 
     private static void action(Canard attaquant, Canard cible) {
         if (attaquant.getAction() == 1){
-            System.out.println(attaquant.getNom() + " attaque !");
-            attaquant.attaquer(cible);
-            afficherEtat(cible);
-        } else {
             System.out.println(attaquant.getNom() + " utilise sa capacité spéciale !");
             attaquant.activerCapaciteSpeciale(cible);
+            afficherEtat(cible);
+            attaquant.SetAction(2); //Permet de dire que la capacité spéciale a déja était utilisé
+        } else {
+            System.out.println(attaquant.getNom() + " attaque !");
+            attaquant.attaquer(cible);
             afficherEtat(cible);
         }
     }
@@ -192,18 +215,43 @@ public class Main {
             System.out.println(canard.getNom() + " est KO !");
         }
         if (canard.getStatut() != StatutCanard.HEUREUX) {
-            System.out.println(canard.getNom() + " est maintenant " + canard.getStatut());
+            System.out.println(canard.getNom() + " est " + canard.getStatut());
         }
         System.out.println(); // Ajoute une ligne vide pour la lisibilité
     }
 
     private static boolean verifierStatut(Canard canard) {
-        if (canard.getStatut() == StatutCanard.GELER) {
-            System.out.println(canard.getNom() + " est geler, il à pas pu agir..");
-            canard.SetStatut(StatutCanard.HEUREUX);
-            return false;
+        switch (canard.getStatut()) {
+            case BRULE:
+                System.out.println(canard.getNom() + " est brûlé et subit 5 dégâts !");
+                canard.subirDegats(5);
+                break;
+
+            case GELE:
+                System.out.println(canard.getNom() + " est gelé, il ne peut pas attaquer !");
+                canard.decrementerStatut();
+                return false; // Il ne peut pas attaquer
+
+            case ETOURDI:
+                if (Math.random() < 0.5) {
+                    System.out.println(canard.getNom() + " est étourdi et rate son attaque !");
+                    canard.decrementerStatut();
+                    return false;
+                } else {
+                    System.out.println(canard.getNom() + " est étourdi mais réussi son attaque !");
+                }
+                break;
+
+            case MOUILLE:
+                System.out.println(canard.getNom() + " est mouillé, sa vitesse d'attaque est toujours réduite !");
+                canard.decrementerStatut();
+                break;
+
+            case HEUREUX:
+            default:
+                break;
         }
-        return true;
+        return true; // Peut attaquer
     }
 
 
@@ -214,4 +262,6 @@ public class Main {
             throw new RuntimeException(e);
         }
     }
+
+
 }

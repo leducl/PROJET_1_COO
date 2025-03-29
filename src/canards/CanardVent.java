@@ -9,6 +9,11 @@ public class CanardVent extends Canard{
 
     @Override
     public void activerCapaciteSpeciale(Canard autreCanard) {
+        this.VA *= 2;
+    }
 
+    @Override
+    public void appliquerEffect(Canard autreCanard) {
+        autreCanard.SetStatut(StatutCanard.ETOURDI);
     }
 }

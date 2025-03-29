@@ -9,6 +9,11 @@ public class CanardGlace extends Canard{
 
     @Override
     public void activerCapaciteSpeciale(Canard autreCanard) {
-        autreCanard.SetStatut(StatutCanard.GELER);
+        autreCanard.SetStatut(StatutCanard.GELE);
+    }
+
+    @Override
+    public void appliquerEffect(Canard autreCanard) {
+        autreCanard.SetStatut(StatutCanard.GELE);
     }
 }

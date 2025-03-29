@@ -50,8 +50,8 @@ class TestCanards {
 
     @Test
     void testSetStatut() {
-        canard1.SetStatut(StatutCanard.ENDORMI);
-        assertEquals(StatutCanard.ENDORMI, canard1.getStatut());
+        canard1.SetStatut(StatutCanard.BRULE);
+        assertEquals(StatutCanard.BRULE, canard1.getStatut());
     }
 
 }
