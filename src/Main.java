@@ -4,10 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Classe principale du jeu Canard Fighter Simulator.
+ * Gère la création de canards et les combats entre eux.
+ */
 public class Main {
     private static ArrayList<Canard> canards = new ArrayList<>();
     private static final Scanner scanner = new Scanner(System.in);
 
+    /**
+     * Point d'entrée du programme Canard Fighter Simulator.
+     * Cette méthode initialise une liste de canards par défaut et propose un menu interactif permettant à l'utilisateur
+     *     1) De créer un nouveau canard.
+     *     2) De lancer une bataille entre canards.
+     *     3) De quitter le programme.
+     *
+     * @param args Arguments de la ligne de commande (non utilisés).
+     */
     public static void main(String[] args) {
 
         //Creation de 4 canards par défaut
@@ -44,7 +57,9 @@ public class Main {
             }
         }
     }
-
+    /**
+     * Permet de créer un canard avec un nom et un type choisi par l'utilisateur.
+     */
     private static void creerCanard() {
         System.out.print("Entrez le nom du canard : ");
         String nom = scanner.nextLine();
@@ -81,6 +96,9 @@ public class Main {
         }
     }
 
+    /**
+     * Lance une bataille entre deux canards sélectionnés par l'utilisateur.
+     */
     private static void lancerBataille() {
         if (canards.size() < 2) {
             System.out.println("Il faut au moins 2 canards pour lancer une bataille !");
@@ -147,6 +165,13 @@ public class Main {
         delay(3000);
     }
 
+    /**
+     * Gère l'action d'un canard pendant un combat.
+     * Si le canard n'a pas encore choisi la capacité spéciale, il peut faire un choix.
+     * Sinon, il est forcé à une attaque normale.
+     *
+     * @param canard Le canard dont l'action doit être gérée.
+     */
     private static void gererActionCanard(Canard canard) {
         if (canard.getAction() == 0) {
             choixAction(canard);
@@ -155,6 +180,13 @@ public class Main {
         }
     }
 
+    /**
+     * Permet au joueur de choisir l'attaque d'un canard.
+     * Deux options sont disponibles : attaque normale ou capacité spéciale.
+     * Vérifie que l'entrée est valide avant de l'appliquer.
+     *
+     * @param canard Le canard qui choisit son attaque.
+     */
     private static void choixAction(Canard canard) {
         int index = -1;
         while (index != 1 && index != 2) { // Tant que l'entrée n'est pas 1 ou 2 on redemande
@@ -165,6 +197,14 @@ public class Main {
         canard.SetAction(index - 1);
     }
 
+    /**
+     * Gère un combat entre deux canards.
+     * Détermine l'ordre d'attaque en fonction de la vitesse des canards.
+     * Vérifie les statuts avant chaque action et applique les attaques.
+     *
+     * @param canard1 Premier canard combattant.
+     * @param canard2 Deuxième canard combattant.
+     */
     public static void combat(Canard canard1, Canard canard2) {
         Canard premierAttaquant, secondAttaquant;
 
@@ -195,6 +235,13 @@ public class Main {
         }
     }
 
+    /**
+     * Exécute une action de combat d'un canard sur un autre.
+     * Peut-être une attaque normale ou une capacité spéciale.
+     *
+     * @param attaquant Le canard attaquant.
+     * @param cible Le canard cible.
+     */
     private static void action(Canard attaquant, Canard cible) {
         if (attaquant.getAction() == 1){
             System.out.println(attaquant.getNom() + " utilise sa capacité spéciale !");
@@ -208,7 +255,10 @@ public class Main {
         }
     }
 
-    // Méthode pour afficher l'état des PV du canard
+    /**
+     * Affiche l'état des PV et du statut d'un canard.
+     * @param canard Le canard dont l'état doit être affiché.
+     */
     private static void afficherEtat(Canard canard) {
         System.out.println(canard.getNom() + " a " + canard.getPointsDeVie() + " PV.");
         if (canard.estKO()) {
@@ -220,6 +270,12 @@ public class Main {
         System.out.println(); // Ajoute une ligne vide pour la lisibilité
     }
 
+    /**
+     * Vérifie l'état actuel du canard et applique les effets correspondants à son statut.
+     *
+     * @param canard Le canard dont le statut doit être vérifié.
+     * @return {@code true} si le canard peut attaquer, {@code false} s'il est empêché d'agir à cause de son statut.
+     */
     private static boolean verifierStatut(Canard canard) {
         switch (canard.getStatut()) {
             case BRULE:
@@ -239,6 +295,7 @@ public class Main {
                     return false;
                 } else {
                     System.out.println(canard.getNom() + " est étourdi mais réussi son attaque !");
+                    canard.decrementerStatut();
                 }
                 break;
 
@@ -254,7 +311,10 @@ public class Main {
         return true; // Peut attaquer
     }
 
-
+    /**
+     * Simule un délai d'attente.
+     * @param millis Temps en millisecondes.
+     */
     private static void delay(int millis){
         try {
             Thread.sleep(millis);
