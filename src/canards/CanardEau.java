@@ -38,7 +38,7 @@ public class CanardEau extends Canard {
      */
     @Override
     public void appliquerEffect(Canard autreCanard) {
-        autreCanard.SetStatut(StatutCanard.MOUILLE);
+        autreCanard.assignerStatut(StatutCanard.MOUILLE, 3);
         double newVA = autreCanard.getVitesseAttaque() / 2;
         autreCanard.SetVA(newVA);
     }

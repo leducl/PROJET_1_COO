@@ -1,8 +1,8 @@
 package canards;
 
 import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class TestCanards {
     private Canard canard1;
@@ -50,8 +50,11 @@ class TestCanards {
 
     @Test
     void testSetStatut() {
-        canard1.SetStatut(StatutCanard.BRULE);
+        canard1.assignerStatut(StatutCanard.BRULE,99);
         assertEquals(StatutCanard.BRULE, canard1.getStatut());
+
+        canard1.assignerStatut(StatutCanard.MOUILLE,3);
+        assertNotEquals(StatutCanard.MOUILLE, canard1.getStatut());
     }
 
 }

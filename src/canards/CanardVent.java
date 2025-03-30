@@ -37,6 +37,6 @@ public class CanardVent extends Canard {
      */
     @Override
     public void appliquerEffect(Canard autreCanard) {
-        autreCanard.SetStatut(StatutCanard.ETOURDI);
+        autreCanard.assignerStatut(StatutCanard.ETOURDI, 2);
     }
 }

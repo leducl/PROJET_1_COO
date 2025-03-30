@@ -81,12 +81,6 @@ public abstract class Canard {
     public void SetAction(int action) { this.action = action; }
 
     /**
-     * Définit le statut du canard.
-     * @param statut Nouveau statut du canard
-     */
-    public void SetStatut(StatutCanard statut) { this.statut = statut; }
-
-    /**
      * Définit la vitesse d'attaque du canard.
      * @param VA Nouvelle vitesse d'attaque
      */
@@ -101,6 +95,12 @@ public abstract class Canard {
         double multiplicateur = TypeCanard.getMultiplicateur(this.typeCanard, autreCanard.getType());
         double degats = PA * multiplicateur * (coupCritique ? 2 : 1);
         autreCanard.subirDegats(degats);
+
+        if (multiplicateur > 1){
+            System.out.println("L'attaque est très efficace !");
+        }else if (multiplicateur < 1){
+            System.out.println("L'attaque n'est pas très efficace !");
+        }
 
         if (coupCritique){
             System.out.println("Ouch, Coup critique !");
@@ -117,6 +117,9 @@ public abstract class Canard {
      */
     public void subirDegats(double degats){
         PV -= degats;
+        if (PV <= 0){
+            PV = 0;
+        }
     }
 
     /**
@@ -148,6 +151,17 @@ public abstract class Canard {
                 }
                 statut = StatutCanard.HEUREUX;
             }
+        }
+    }
+    /**
+     * Définit le statut du canard, seulement s'il est heureux
+     * @param statut Nouveau statut du canard
+     * @param nbTour Nombre de tours où le statut reste actif
+     */
+    public void assignerStatut(StatutCanard statut, int nbTour) {
+        if (this.statut == StatutCanard.HEUREUX) {
+            statutDuree = nbTour;
+            this.statut = statut;
         }
     }
 

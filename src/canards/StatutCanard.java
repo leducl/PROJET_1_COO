@@ -6,37 +6,28 @@ package canards;
 
 public enum StatutCanard {
     /**
-     * Canard heureux, sans effet négatif.
+     * Canard heureux, sans effet négatif
      */
-    HEUREUX(0),
+    HEUREUX,
 
     /**
-     * Canard brûlé : subit des dégâts à chaque tour (99 = permanent jusqu'à guérison).
+     * Canard brûlé : subit des dégâts à chaque tour
      */
-    BRULE(99),
+    BRULE,
 
     /**
-     * Canard gelé : ne peut pas attaquer pendant 2 tours.
+     * Canard gelé : ne peut pas attaquer
      */
-    GELE(2),
+    GELE,
 
     /**
-     * Canard étourdi : a 50% de chance de rater son attaque.
+     * Canard étourdi : à 50% de chance de rater son attaque
      */
-    ETOURDI(1),
+    ETOURDI,
 
     /**
-     * Canard mouillé : réduction de 50% de sa vitesse d'attaque (VA) pendant 1 tour.
+     * Canard mouillé : réduction de 50% de sa vitesse d'attaque (VA)
      */
-    MOUILLE(1);
+    MOUILLE;
 
-    private int duree;
-
-    /**
-     * Constructeur du statut du canard.
-     * @param duree Nombre de tours pendant lesquels le statut est actif.
-     */
-    StatutCanard(int duree) {
-        this.duree = duree;
-    }
 }

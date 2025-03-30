@@ -39,6 +39,6 @@ public class CanardFeu extends Canard {
      */
     @Override
     public void appliquerEffect(Canard autreCanard) {
-        autreCanard.SetStatut(StatutCanard.BRULE);
+        autreCanard.assignerStatut(StatutCanard.BRULE, 99);
     }
 }
