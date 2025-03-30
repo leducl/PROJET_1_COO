@@ -52,7 +52,7 @@ void activerCapaciteSpeciale();
 ### 3️⃣ Comment représenter un changement de statut (ex: brûlé ou paralysé) ?
 ✅ Une `enum Statut` pourrait être utilisée avec des valeurs :
 ```java
-NORMAL, BRULE, PARALYSE, GELE
+NORMAL, BRULE, MOUILLE, GELE
 ```
 🔹 Chaque `Canard` aurait un attribut `statutActuel` et une méthode :
 
