@@ -15,7 +15,7 @@ Ce projet illustre des concepts clés de la **programmation orientée objet (POO
 ## 📊 Diagramme UML des classes
 
 📌 *Voir* `diagramme_classe.png`
-
+![TestCanards.png](diagramme_classe.png)
 Le modèle suit une approche **orientée objet** avec :
 - Une **classe de base** `Canard`.
 - Des **sous-classes** représentant différents types de canards.
