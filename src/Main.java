@@ -58,13 +58,46 @@ public class Main {
         }
     }
     /**
-     * Permet de créer un canard avec un nom et un type choisi par l'utilisateur.
+     * Permet de créer un canard avec un nom, PV, PA, VA et un type choisi par l'utilisateur.
      */
     private static void creerCanard() {
         System.out.print("Entrez le nom du canard : ");
         String nom = scanner.nextLine();
 
-        //index gérant les erreurs de choix d'utilisateur
+        // Choix des points de vie du canard
+        int pv = -1;
+        while (pv < 50 || pv > 200) {
+            System.out.print("Entrez les points de vie du canard (entre 50 et 200) : ");
+            pv = scanner.nextInt();
+            scanner.nextLine(); // Consommer le retour à la ligne
+            if (pv < 50 || pv > 200) {
+                System.out.println("Valeur invalide ! Les PV doivent être entre 50 et 200.");
+            }
+        }
+
+        // Choix de la vitesse d'attaque du canard
+        double vitesseAttaque = -1;
+        while (vitesseAttaque < 0.5 || vitesseAttaque > 2) {
+            System.out.print("Entrez la vitesse d'attaque du canard (entre 0,5 et 2)\n ! Utiliser la virgule ! : ");
+            vitesseAttaque = scanner.nextDouble();
+            scanner.nextLine(); // Consommer le retour à la ligne
+            if (vitesseAttaque < 0.5 || vitesseAttaque > 2) {
+                System.out.println("Valeur invalide ! La vitesse d'attaque doit être entre 0,5 et 2.");
+            }
+        }
+
+        // Choix des dégâts du canard
+        int degats = -1;
+        while (degats < 5 || degats > 20) {
+            System.out.print("Entrez les dégâts du canard (entre 5 et 20) : ");
+            degats = scanner.nextInt();
+            scanner.nextLine(); // Consommer le retour à la ligne
+            if (degats < 5 || degats > 20) {
+                System.out.println("Valeur invalide ! Les dégâts doivent être entre 5 et 20.");
+            }
+        }
+
+        // Index gérant les erreurs de choix de type
         int index = -1;
         while (index < 1 || index > TypeCanard.COUNT.ordinal()) {
 
@@ -83,10 +116,10 @@ public class Main {
         }
         TypeCanard type = TypeCanard.values()[index - 1];
         Canard canard = switch (type) {
-            case EAU -> new CanardEau(nom, 100, 10, 2);
-            case FEU -> new CanardFeu(nom, 100, 10, 2);
-            case GLACE -> new CanardGlace(nom, 100, 10, 2);
-            case VENT -> new CanardVent(nom, 100, 10, 2);
+            case EAU -> new CanardEau(nom, pv, degats, vitesseAttaque);
+            case FEU -> new CanardFeu(nom, pv, degats, vitesseAttaque);
+            case GLACE -> new CanardGlace(nom, pv, degats, vitesseAttaque);
+            case VENT -> new CanardVent(nom, pv, degats, vitesseAttaque);
             default -> null;
         };
 
@@ -95,6 +128,7 @@ public class Main {
             System.out.println("Canard créé : " + canard.getNom() + " de type " + canard.getType());
         }
     }
+
 
     /**
      * Lance une bataille entre deux canards sélectionnés par l'utilisateur.
